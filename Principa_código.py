@@ -2,16 +2,23 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 
-def interfaz_uno():
-    area_dinamica_limpia()
-    tk.Label(area_dinamica, text="Aquí va un mensaje de bienvenida", font=("Arial", 14)).pack(pady=10)
-    tk.Button(area_dinamica, text="Botón 1", command=lambda: messagebox.showinfo("Título", "Mensaje temporal")).pack()
+# Función para limpiar el área dinámica
+def limpiar_area_dinamica():
+    for widget in area_dinamica.winfo_children():
+        widget.destroy()
 
-def interfaz_dos():
-    area_dinamica_limpia()
+# Función para la pantalla de inicio
+def mostrar_pantalla_inicio():
+    limpiar_area_dinamica()
+    tk.Label(area_dinamica, text="Aquí va un mensaje de bienvenida", font=("Arial", 14)).pack(pady=10)
+    tk.Button(area_dinamica, text="Mostrar mensaje de bienvenida", command=lambda: messagebox.showinfo("Título", "Mensaje temporal")).pack()
+
+# Función para el formulario del alumno
+def mostrar_formulario_alumno():
+    limpiar_area_dinamica()
     tk.Label(area_dinamica, text="Aquí coloca un letrero o label que identifique al alumno", font=("Arial", 14)).pack(pady=10)
 
-    tk.Label(area_dinamica, text="Campo A:").pack()
+    tk.Label(area_dinamica, text="Nombre de el alumno:").pack()
     campo_texto_uno = tk.Entry(area_dinamica)
     campo_texto_uno.pack(pady=5)
 
@@ -25,29 +32,31 @@ def interfaz_dos():
     combo.pack()
     combo.current(0)
 
-    def accion_guardar():
+    def guardar_datos_alumno():
         valor = campo_texto_uno.get()
         messagebox.showinfo("Revisión", f"Texto: {valor}\nSelección: {opcion_elegida.get()}\nLista: {combo.get()}")
 
-    tk.Button(area_dinamica, text="Botón 2", command=accion_guardar).pack(pady=10)
+    tk.Button(area_dinamica, text="Guardar Datos", command=guardar_datos_alumno).pack(pady=10)
 
-def interfaz_tres():
-    area_dinamica_limpia()
+# Función para la configuración de la interfaz
+def mostrar_configuracion_interfaz():
+    limpiar_area_dinamica()
     tk.Label(area_dinamica, text="Configuraciones temporales", font=("Arial", 14)).pack(pady=10)
 
     colores = ["lightblue", "lightgreen", "lightyellow", "lightgray"]
     tk.Label(area_dinamica, text="Cambiar fondo:").pack()
 
-    def cambiar_color(c):
+    def cambiar_color_fondo(c):
         ventana_principal.config(bg=c)
         menu_lateral.config(bg=c)
         area_dinamica.config(bg=c)
 
     for c in colores:
-        tk.Button(area_dinamica, text=c, bg=c, width=20, command=lambda col=c: cambiar_color(col)).pack(pady=2)
+        tk.Button(area_dinamica, text=c, bg=c, width=20, command=lambda col=c: cambiar_color_fondo(col)).pack(pady=2)
 
-def interfaz_cuatro():
-    area_dinamica_limpia()
+# Función para mostrar la pantalla de ayuda
+def mostrar_pantalla_ayuda():
+    limpiar_area_dinamica()
     tk.Label(area_dinamica, text="Texto de ayuda que el alumno debe mejorar", font=("Arial", 14)).pack(pady=10)
     contenido = (
         "Explica con tus palabras:\n\n"
@@ -58,26 +67,29 @@ def interfaz_cuatro():
     )
     tk.Label(area_dinamica, text=contenido, justify="left").pack(pady=10)
 
-def area_dinamica_limpia():
-    for widget in area_dinamica.winfo_children():
-        widget.destroy()
-
+# Creación de la ventana principal
 ventana_principal = tk.Tk()
-ventana_principal.title("Interfaz para prácticas")
+ventana_principal.title("Interfaz para practicas")
 ventana_principal.geometry("500x400")
 ventana_principal.config(bg="lightblue")
 
+# Creación del menú al lado
 menu_lateral = tk.Frame(ventana_principal, bg="lightblue", width=120)
 menu_lateral.pack(side="left", fill="y")
 
+# Creación del área dinámica
 area_dinamica = tk.Frame(ventana_principal, bg="white")
 area_dinamica.pack(side="right", expand=True, fill="both")
 
-tk.Button(menu_lateral, text="Pantalla 1", command=interfaz_uno, width=15).pack(pady=10)
-tk.Button(menu_lateral, text="Pantalla 2", command=interfaz_dos, width=15).pack(pady=10)
-tk.Button(menu_lateral, text="Pantalla 3", command=interfaz_tres, width=15).pack(pady=10)
-tk.Button(menu_lateral, text="Pantalla 4", command=interfaz_cuatro, width=15).pack(pady=10)
+# Botones del menú con las funciones actualizadas
+tk.Button(menu_lateral, text="Inicio", command=mostrar_pantalla_inicio, width=15).pack(pady=10)
+tk.Button(menu_lateral, text="Formulario Alumno", command=mostrar_formulario_alumno, width=15).pack(pady=10)
+tk.Button(menu_lateral, text="Configuración", command=mostrar_configuracion_interfaz, width=15).pack(pady=10)
+tk.Button(menu_lateral, text="Ayuda", command=mostrar_pantalla_ayuda, width=15).pack(pady=10)
 tk.Button(menu_lateral, text="Salir", command=ventana_principal.destroy, width=15).pack(pady=30)
 
-interfaz_uno()
+# Mostrar pantalla de inicio 
+mostrar_pantalla_inicio()
+
+# Iniciar el bucle de la interfaz
 ventana_principal.mainloop()
